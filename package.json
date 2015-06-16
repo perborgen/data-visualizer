@@ -1,0 +1,32 @@
+{
+  "name": "data-visualizer",
+  "version": "1.0.0",
+  "description": "Visualizing data with React.js and D3.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perborgen/data-visualizer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/perborgen/data-visualizer/issues"
+  },
+  "homepage": "https://github.com/perborgen/data-visualizer#readme",
+  "dependencies": {
+    "d3": "^3.5.5",
+    "hapi": "^8.6.1",
+    "react": "^0.13.3",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.4",
+    "gulp": "^3.9.0",
+    "reactify": "^1.1.1",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.2"
+  }
+}
