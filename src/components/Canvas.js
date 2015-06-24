@@ -1,86 +1,91 @@
-var React 		= require("react");
+var React = require("react");
 var Bar = require('./Bar');
 var Path = require('./Path');
 var canvas;
 var underscore = require('underscore');
 var Canvas = React.createClass({
 
-	componentDidMount: function(){
-/*		canvas = d3.select("body")
-			.append("svg")
-			.attr("width", this.props.width)
-			.attr("height",this.props.height)
-			.attr("ref", "svg")
-            .style("border", "1px solid black");*/
+	componentWillMount: function(){
+		this.colorScale = d3.scale.ordinal()
+			.domain([d3.range(this.props.colors.length - 1)])
+			.range(this.props.colors);
+
+		var data =[parseInt(this.props.A),parseInt(this.props.B)]; 
+		this.heightScale = d3.scale.linear()
+							.domain([0,d3.max(data)])
+							.range([0,150]);
+
 	},
 
-	drawRect: function(){
+	update_d3: function(){
 
-		/*var data = [this.props.A,this.props.B];
-
-		var color = d3.scale.ordinal()
-					.range(['red','blue']);
-
-		var pie = d3.layout.pie()
-					.value(function(d){return d});
-
-		var arc = d3.svg.arc()
-					.innerRadius(40)
-					.outerRadius(50);
-
-
-		var group = canvas.append("g")
-					.attr("transform", "translate(50,50)");
-
-		var arcs = group.selectAll(".arc")
-					.data(pie(data))
-					.enter()
-						.append("g")
-						.attr("class", "arc")
-						.append("path")
-						.attr("d", arc)
-						.attr("fill", function(d){ return color(d.data)});
-*/
-/*
-		canvas.selectAll("rect")
-		.data(data)
-		.enter()
-			.append("rect")
-			.attr("width", 20)
-			.attr("height", function(d){ return d*30 })
-			.attr("x", function(d,i){ return i*40})
-			.attr("y", function(d){ return 200 - (d*30)})
-			.attr("fill", "green");*/
+		var data =[parseInt(this.props.A),parseInt(this.props.B)]; 
+		this.heightScale = d3.scale.linear()
+							.domain([0,d3.max(data)])
+							.range([0,150]);
 	},
+
+
+
+	makeHist: function(value,i){
+
+	},
+
+	makeBar: function(value,i){
+		return <Bar height={this.heightScale(value)} width={30} x={i*40} y={200} color={this.colorScale(i)} key={i} />
+	},
+
+
+ 	makePath: function(point,i){
+		return <Path colors={this.props.colors} data={point} key={i} color={this.colorScale(i)} />
+	},
+
+
 
 	render: function(){
+		
+		var colors = this.props.colors;
+		var colorScale = d3.scale.ordinal()
+			.domain([d3.range(colors.length - 1)])
+			.range(colors);
 
-		var color = d3.scale.ordinal()
-					.range(['red','blue']);
+		var data =[parseInt(this.props.A),parseInt(this.props.B)]; 
+		var heightScale = d3.scale.linear()
+							.domain([0,d3.max(data)])
+							.range([0,150]);
 
 		var availableHeight = 200;
-		var data = [this.props.A,this.props.B];
 
-		var bars = data.map(function(value,i){
-			return <Bar height={value} width={30} x={i*40} y={availableHeight} color="blue" key={i} />
-		});
+		var bars = data.map(this.makeBar);
+
+		var hists = data.map(this.makeHist);
 
 		var pie = d3.layout.pie()
 					.value(function(d){return d});
 
 		var that = this;
-		var paths = underscore.map(pie(data), function(point,i){
-			return <Path colors={that.props.colors} data={point} key={i} index={i} />
-		});
 
+		var paths = underscore.map(pie(data),this.makePath);
 
+		var pack = d3.layout.pack()
+					.size([50,50])
+					.padding(10);
+
+		var nodes = pack.nodes(data);
 
 		return (
-			<svg width={this.props.width} height={this.props.height} style={{border:'1px solid black'}} >
-				<g transform="translate(50,50)">
-				{paths}	
-				</g>
-			</svg>
+			<div>
+				<svg width={this.props.width} height={this.props.height} style={{border:'1px solid black'}} >
+					<g transform="translate(100,100)">
+					{paths}	
+					</g>
+				</svg>
+				<svg width={this.props.width} height={this.props.height} style={{border:'1px solid black'}} >
+					<g>
+					{bars}	
+					</g>
+				</svg>
+			</div>
 		);
 	}
 });

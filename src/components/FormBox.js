@@ -15,8 +15,6 @@ var FormBox = React.createClass({
 				<input type="number" id="a" value={valueA} onChange={this.handleChange} />
 				<br />
 				<input type="number" id="b" value={valueB} onChange={this.handleChange} />
-				<br />
-				<input type="submit" onClick={this.props.draw} />
 			</div>
 		);
 	}
